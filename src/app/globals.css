@@ -1,0 +1,375 @@
+@import url('https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Reset and Base Styles */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* Whole website background using background.png */
+html,
+body {
+  min-height: 100vh;
+  background: #050507 url('/images/background.png') center center / cover no-repeat fixed;
+  color: #f2eee9;
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Handwriting Font for Cursive Headings and Titles */
+.font-handwriting {
+  font-family: 'Caveat', cursive, sans-serif;
+}
+
+.font-mono {
+  font-family: 'JetBrains Mono', monospace, monospace;
+}
+
+/* Main Layout Stage */
+.main-stage {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  max-width: 940px;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+  z-index: 1;
+}
+
+/* Outer phone frame mockup */
+.phone-frame {
+  position: relative;
+  width: 440px;
+  max-width: 100%;
+  height: 660px;
+  min-height: 660px;
+  max-height: 660px;
+  background-color: rgba(8, 8, 10, 0.92);
+  backdrop-filter: blur(16px);
+  border: 1.5px solid rgba(225, 220, 205, 0.45);
+  border-radius: 32px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 25px 70px rgba(0, 0, 0, 0.95);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+@media (max-width: 480px) {
+  .phone-frame {
+    width: 100%;
+    height: 640px;
+    min-height: 640px;
+    max-height: 640px;
+    padding: 20px;
+    border-radius: 28px;
+  }
+}
+
+/* Background image inside phone frame */
+.phone-frame-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.phone-frame-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, rgba(5, 5, 7, 0.5) 0%, rgba(5, 5, 7, 0.2) 50%, rgba(5, 5, 7, 0.65) 100%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* Smooth Slide-in and Slide-out Wrapper for Player */
+.player-desktop-wrapper {
+  overflow: hidden;
+  transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    opacity 0.45s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    margin 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: width, opacity, transform;
+  flex-shrink: 0;
+}
+
+.player-desktop-wrapper.closed {
+  width: 0 !important;
+  opacity: 0;
+  transform: translateX(60px) scale(0.96);
+  pointer-events: none;
+  margin-left: 0 !important;
+}
+
+.player-desktop-wrapper.open {
+  width: 440px !important;
+  opacity: 1;
+  transform: translateX(0) scale(1);
+  pointer-events: auto;
+  margin-left: 28px;
+}
+
+/* Mobile Slide In / Out */
+@keyframes mobileFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.mobile-animate-in {
+  animation: mobileFadeIn 0.35s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Playlist card */
+.playlist-card-container {
+  position: relative;
+  width: 100%;
+  height: 114px;
+  border-radius: 16px;
+  border: 1.2px solid rgba(225, 220, 205, 0.3);
+  overflow: hidden;
+  background-color: #0f1015;
+  transition: all 0.25s ease;
+  cursor: pointer;
+}
+
+.playlist-card-container:hover {
+  border-color: rgba(225, 220, 205, 0.6);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.6);
+}
+
+.playlist-card-container.active {
+  border-color: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+  outline: 1.5px solid rgba(255, 255, 255, 0.5);
+}
+
+.playlist-card-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  z-index: 1;
+  transition: transform 0.4s ease;
+}
+
+.playlist-card-container:hover .playlist-card-img {
+  transform: scale(1.04);
+}
+
+.playlist-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.2) 50%, transparent 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+.playlist-card-footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 8px 12px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.playlist-card-title {
+  font-family: 'Caveat', cursive, sans-serif;
+  font-size: 22px;
+  color: #f2eee9;
+  letter-spacing: 0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
+  line-height: 1.1;
+}
+
+.playlist-card-arrow {
+  color: rgba(255, 255, 255, 0.55);
+  display: flex;
+  align-items: center;
+  transition: all 0.2s ease;
+}
+
+.playlist-card-container:hover .playlist-card-arrow {
+  color: #ffffff;
+  transform: translateX(2px);
+}
+
+/* Bottom Player Controls Box */
+.player-controls-box {
+  position: relative;
+  width: 100%;
+  border-radius: 20px;
+  border: 1.2px solid rgba(225, 220, 205, 0.35);
+  background-color: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(14px);
+  padding: 14px 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.7);
+  z-index: 10;
+}
+
+/* Control Buttons */
+.ctrl-btn {
+  background: transparent;
+  border: 1px solid rgba(225, 220, 205, 0.4);
+  color: #f2eee9;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+
+.ctrl-btn:hover {
+  border-color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.ctrl-btn:active {
+  transform: scale(0.95);
+}
+
+.ctrl-btn.btn-sm {
+  width: 42px;
+  height: 42px;
+}
+
+.ctrl-btn.btn-lg {
+  width: 56px;
+  height: 56px;
+  border-width: 1.5px;
+  border-color: rgba(225, 220, 205, 0.6);
+}
+
+.ctrl-btn.btn-lg:hover {
+  border-color: #ffffff;
+  box-shadow: 0 0 16px rgba(255, 255, 255, 0.3);
+}
+
+/* Range Slider */
+.player-slider {
+  position: relative;
+  width: 100%;
+  height: 18px;
+  display: flex;
+  align-items: center;
+}
+
+.player-slider input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+  padding: 0;
+}
+
+.player-slider input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #f5f0e6;
+  border: 2px solid #08080a;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+.player-slider input[type="range"]::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: #f5f0e6;
+  border: 2px solid #08080a;
+  box-shadow: 0 0 6px rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+}
+
+/* Spinning Animation for Vinyl */
+@keyframes spinSlow {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.spin-vinyl {
+  animation: spinSlow 14s linear infinite;
+}
+
+.spin-paused {
+  animation-play-state: paused;
+}
+
+/* Waveform pulse animation */
+@keyframes wavePulse {
+  0% {
+    transform: scaleY(0.4);
+    opacity: 0.45;
+  }
+
+  50% {
+    transform: scaleY(1.25);
+    opacity: 0.95;
+  }
+
+  100% {
+    transform: scaleY(0.6);
+    opacity: 0.6;
+  }
+}
+
+/* Scrollbar styles */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 9999px;
+}
